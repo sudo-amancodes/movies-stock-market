@@ -15,9 +15,10 @@ class User(UserMixin, db.Model):
     username = Column(String(255), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
     profile_picture = Column(String(255),default='default.jpg')
-
-    watchlist_teams = db.relationship('UserWatchlistTeams', backref='user', lazy=True)
-
     
     def get_id(self):
         return str(self.user_id)
+
+
+
+
