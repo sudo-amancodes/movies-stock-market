@@ -1,7 +1,7 @@
 import os, flask, requests, json, flask_login
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from src.models import db, User, SoccerTeam, UserWatchlistTeams
+from src.models import db, User
 from flask import request, jsonify, redirect, url_for, session, render_template, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename

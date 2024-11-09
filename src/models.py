@@ -21,24 +21,3 @@ class User(UserMixin, db.Model):
     
     def get_id(self):
         return str(self.user_id)
-
-
-class SoccerTeam(db.Model):
-    __tablename__ = 'soccer_teams'
-    team_id = Column(Integer, primary_key=True)
-    team_name = Column(String(255), nullable=False)
-    wins_draws_losses = Column(String(50))
-    logo = Column(String(255))
-
-    def __str__(self):
-        return f"{self.team_id}, {self.team_name}, {self.wins_draws_losses}, {self.logo}"
-
-class UserWatchlistTeams(db.Model):
-    __tablename__ = 'user_watchlist_teams'
-    user_id = Column(Integer, ForeignKey('users.user_id'), primary_key=True)
-    team_id = Column(Integer, ForeignKey('soccer_teams.team_id'), primary_key=True)
-
-    def __str__(self):
-        return f"{self.user_id}, {self.team_id}"
-
-
