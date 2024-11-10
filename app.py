@@ -61,6 +61,7 @@ def register():
 @app.get('/login')
 def login_page():
     return render_template('login.html')
+    
 
 @app.post('/login')
 def login():
@@ -91,6 +92,33 @@ def logout():
 def profile():
 
     return render_template('profile.html')
+
+@app.post('/update_profile_pic')
+@login_required
+def update_profile_pic():
+    if 'profile_pic' not in request.files:
+        flash('No file part', 'danger')
+        return redirect(url_for('profile'))
+
+    file = request.files['profile_pic']
+    
+    if file.filename == '':
+        flash('No selected file', 'danger')
+        return redirect(url_for('profile'))
+
+    if file and allowed_file(file.filename):  
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.root_path, 'static/profile_pics', filename)
+        file.save(filepath)
+
+        current_user.profile_picture = filename
+        db.session.commit()
+
+        flash('Profile picture updated!', 'success')
+        return redirect(url_for('profile'))
+    else:
+        flash('Invalid file type', 'danger')
+        return redirect(url_for('profile'))
 
 
 app.config['TEMPLATES_AUTO_RELOAD'] = True

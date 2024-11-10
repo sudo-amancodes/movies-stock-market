@@ -5,29 +5,6 @@
     <h2 class="text-center mb-4"></h2>
 
     <div id="alert-placeholder" class="alert d-none" role="alert"></div>
-
-    {% if teams %}
-    <div class="row" id="teams-list">
-      {% for team in teams %}
-      <div class="col-md-4 mb-4" id="team-{{ team.id }}">
-        <div class="card team-card" onclick="addToWatchlist('{{ team.id }}')">
-          <div class="card-body text-center">
-            <img
-              src="{{ team.crest }}"
-              alt="{{ team.name }}"
-              style="width: 60px; height: auto"
-              class="mb-3"
-            />
-            <h5 class="card-title">{{ team.name }}</h5>
-            <p class="card-text">Record: {{ team.wins_draws_losses }}</p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    {% else %}
-    <p class="text-center">No teams available at the moment.</p>
-    {% endif %}
   </div>
 </div>
 

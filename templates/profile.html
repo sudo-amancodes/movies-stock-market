@@ -4,6 +4,42 @@ content %}
   <div class="col-md-8">
     <h2 class="text-center mb-4">Profile</h2>
 
+    <div class="card text-center p-4 mb-4">
+      <div
+        class="profile-picture-container d-flex justify-content-center align-items-center mb-4"
+      >
+        <img
+          src="{{ url_for('static', filename='profile_pics/' ~ current_user.profile_picture) }}"
+          alt="Profile Picture"
+          class="rounded-circle shadow"
+          style="width: 150px; height: 150px; object-fit: cover"
+        />
+      </div>
+
+      <form
+        action="{{ url_for('update_profile_pic') }}"
+        method="POST"
+        enctype="multipart/form-data"
+        class="mt-4"
+      >
+        <div class="custom-file w-50 mx-auto">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="profilePic"
+            name="profile_pic"
+            required
+          />
+          <label class="custom-file-label text-left" for="profilePic"
+            >Choose a file</label
+          >
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">
+          Change Profile Picture
+        </button>
+      </form>
+    </div>
+
     <div class="text-center mt-4">
       <a href="{{ url_for('logout') }}" class="btn btn-warning">Logout</a>
     </div>
