@@ -7,7 +7,7 @@ from flask import request, jsonify, redirect, url_for, session, render_template,
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 
-from src.models import User, db
+from src.models import Role, User, db
 from dotenv import load_dotenv
 
 # Comment this if you are using environment variables in your code instead of in a .env file (not recommended)
@@ -66,6 +66,14 @@ with app.app_context():
     db.create_all()
     print("Tables created!")
 
+with app.app_context():
+    if not Role.query.filter_by(name="User").first():
+        db.session.add(Role(name="User"))
+    if not Role.query.filter_by(name="Movie Studio").first():
+        db.session.add(Role(name="Movie Studio"))
+    db.session.commit()
+
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
@@ -86,6 +94,7 @@ def register():
     last_name = request.form.get('last_name')
     username = request.form.get('username')
     password = request.form.get('password')
+    role = request.form.get('role')  # New field for role selection
 
     existing_user = User.query.filter_by(username=username).first()
     if existing_user:
@@ -94,12 +103,25 @@ def register():
 
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256:600000')
     
+    # Create the new user
     new_user = User(first_name=first_name, last_name=last_name, username=username, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
 
-    flash('Registration successful. Please log in.', 'success')
+    # Assign role
+    selected_role = Role.query.filter_by(name=role).first()
+    if not selected_role:
+        # If the role doesn't exist, create it
+        selected_role = Role(name=role)
+        db.session.add(selected_role)
+        db.session.commit()
+
+    new_user.roles.append(selected_role)
+    db.session.commit()
+
+    flash(f'Registration successful as a {role}. Please log in.', 'success')
     return redirect(url_for('login'))
+
 
 @app.get('/login')
 def login_page():

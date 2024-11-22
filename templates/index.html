@@ -1,27 +1,11 @@
 {% extends "_layout.html" %} {% block title %}Movie Stock Market{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <h2 class="text-center mb-4"></h2>
-
-    <div id="alert-placeholder" class="alert d-none" role="alert"></div>
-  </div>
+<!-- Link to CSS -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/login-register.css') }}"
+/>
+<div class="body">
+  <!-- Header Title: Centered and larger font -->
 </div>
-
-<style>
-  .team-card {
-    cursor: pointer;
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .team-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  .alert {
-    margin-bottom: 20px;
-    text-align: center;
-  }
-</style>
 {% endblock %}

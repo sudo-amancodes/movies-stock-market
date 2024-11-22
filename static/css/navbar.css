@@ -1,0 +1,73 @@
+/* Navbar Styling */
+.custom-navbar {
+  background: rgba(40, 40, 40, 0.9); /* Dark semi-transparent background */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Thin border for a sleek finish */
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #eaeaea; /* Bright text for the brand */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Subtle text shadow */
+}
+
+.navbar-brand:hover {
+  color: #00bcd4; /* Cyan on hover */
+}
+
+.navbar-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%; /* Circular logo */
+  border: 1px solid #eaeaea; /* Subtle border around the logo */
+}
+
+.nav-link {
+  font-size: 16px;
+  color: #eaeaea; /* Brighter text for links */
+  margin-left: 10px;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #00bcd4; /* Cyan text on hover */
+  text-shadow: 1px 1px 3px rgba(0, 188, 212, 0.5); /* Glow effect */
+}
+
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5); /* Transparent toggle border */
+}
+
+.navbar-toggler-icon {
+  background-image: linear-gradient(
+    to right,
+    #00bcd4,
+    #008ba3
+  ); /* Gradient toggle icon */
+}
+
+.navbar-collapse {
+  justify-content: flex-end; /* Align nav items to the right */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 18px;
+  }
+
+  .navbar-logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    margin-left: 0;
+  }
+}

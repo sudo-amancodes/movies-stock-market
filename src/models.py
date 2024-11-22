@@ -27,6 +27,9 @@ class User(db.Model, flask_login.UserMixin):
     # Relationship with Role through user_roles table
     roles = db.relationship('Role', secondary=user_roles, back_populates='users')
 
+    def get_roles(self):
+        return [role.name for role in self.roles][0]
+
     def __init__(self, first_name, last_name, username, password):
         self.first_name = first_name
         self.last_name = last_name
