@@ -1,28 +1,72 @@
-import os, flask, requests, json, flask_login
+import os
+import flask
+import flask_login
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from src.models import db, User
 from flask import request, jsonify, redirect, url_for, session, render_template, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 
-from flask import request, jsonify, redirect, url_for, session, render_template
+from src.models import User, db
+from dotenv import load_dotenv
 
-app = flask.Flask(__name__)
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+# Comment this if you are using environment variables in your code instead of in a .env file (not recommended)
+# def create_app():
+#     app = flask.Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
-app.secret_key = os.getenv("SECRET_KEY")
+#     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+#     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)
+#     app.secret_key = os.getenv("SECRET_KEY")
+#     db.init_app(app)
+
+#     DB_USER = os.getenv('DB_USER', 'postgres')  # Replace with your default or env variable
+#     DB_PASS = os.getenv('DB_PASS', '2327')  # Replace with your default or env variable
+#     DB_HOST = os.getenv('DB_HOST', 'localhost')  # Replace with your DB host
+#     DB_PORT = os.getenv('DB_PORT', '5432')  # Replace with the port your DB is running on
+#     DB_NAME = os.getenv('DB_NAME', 'postgres')  # Replace with your actual DB name
+
+#     return app
+
+# Comment this if you are using environment variables a .env file intead of in your code (recommended)
+def create_app():
+    app = flask.Flask(__name__)
+    
+    load_dotenv()
+
+    DB_USER = os.getenv('DB_USER')
+    DB_PASS = os.getenv('DB_PASS')
+    DB_HOST = os.getenv('DB_HOST')
+    DB_PORT = os.getenv('DB_PORT')
+    DB_NAME = os.getenv('DB_NAME')
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    app.secret_key = os.getenv("SECRET_KEY")
+    db.init_app(app)
+
+    return app
+
+
+app = create_app()
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
+# User loader for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return User.query.get(int(user_id))  
+
+# Create tables if they do not exist
+with app.app_context():
+    db.create_all()
+    print("Tables created!")
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -56,12 +100,10 @@ def register():
 
     flash('Registration successful. Please log in.', 'success')
     return redirect(url_for('login'))
-    
 
 @app.get('/login')
 def login_page():
     return render_template('login.html')
-    
 
 @app.post('/login')
 def login():
@@ -86,11 +128,9 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('login_page'))
 
-
 @app.get('/profile')
 @login_required
 def profile():
-
     return render_template('profile.html')
 
 @app.post('/update_profile_pic')
@@ -119,7 +159,6 @@ def update_profile_pic():
     else:
         flash('Invalid file type', 'danger')
         return redirect(url_for('profile'))
-
 
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
