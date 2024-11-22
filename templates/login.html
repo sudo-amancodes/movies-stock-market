@@ -3,27 +3,40 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Login</h2>
-                <form action="{{ url_for('login') }}" method="POST">
-                    <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input type="text" class="form-control" name="username" required>
-                    </div>
+<!-- Link to CSS -->
+<link rel="stylesheet" href='static/css/login.css'>
 
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" class="form-control" name="password" required>
-                    </div>
+<div class="body"> 
+    <!-- Header Title: Centered and larger font -->
+    <div class="header-title text-center mb-4">
+        <h1>Movie Stock Exchange</h1>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Login Title -->
+                    <h2 class="card-title text-center mb-4">Login</h2>
+                    <!-- Login Form -->
+                    <form action="{{ url_for('login') }}" method="POST">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" class="form-control" name="username" required>
+                        </div>
 
-                    <button type="submit" class="btn btn-primary btn-block">Login</button>
-                </form>
-                <p class="text-center mt-3">Don't have an account? 
-                    <a href="{{ url_for('register_page') }}">Register here</a>
-                </p>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" class="form-control" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                    <!-- Register Link -->
+                    <p class="text-center mt-3">Don't have an account? 
+                        <a href="{{ url_for('register_page') }}">Register here</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,77 @@
+/* Make the body use the background image */
+body {
+    background-image: url("../profile_pics/login.jpeg"); /* Path relative to the CSS file */
+    background-size: cover; /* Make the image cover the entire page */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+    background-position: center; /* Center the image */
+    height: 100vh; /* Full viewport height */
+    margin: 0; /* Remove default margins */
+    font-family: Arial, sans-serif; /* Optional: Improve text appearance */
+}
+
+/* Center the card on the page */
+.row {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card adjustments for better visibility */
+.card {
+    background: rgba(255, 255, 255, 0.85); /* Semi-transparent background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+    overflow: hidden;
+}
+
+/* Improve button appearance */
+.btn-primary {
+    background-color: #007bff; /* Standard Bootstrap blue */
+    border-color: #007bff;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    border-color: #0056b3;
+}
+
+/* Center and style the header title */
+.header-title h1 {
+    font-size: 48px; /* Increase font size */
+    color: black; /* Set text color to white for visibility */
+    text-align: center; /* Center align the title */
+    margin-bottom: 30px; /* Space below the title */
+    font-weight: bold; /* Make the font bold for emphasis */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Optional: Add shadow to make the text stand out */
+}
+
+/* Style the login form inputs and labels */
+.form-group label {
+    font-size: 16px; /* Adjust font size of labels */
+    color: #333; /* Dark color for labels */
+}
+
+.form-group input {
+    font-size: 16px; /* Font size for inputs */
+    padding: 10px; /* Add padding for better input appearance */
+    border-radius: 5px; /* Round the corners of input fields */
+    border: 1px solid #ccc; /* Light gray border */
+}
+
+.form-group input:focus {
+    border-color: #007bff; /* Change border color on focus */
+    outline: none; /* Remove the default outline on focus */
+}
+
+/* Style the register link text */
+p.text-center a {
+    font-size: 16px;
+    color: #007bff; /* Use the same color as the button */
+    text-decoration: none; /* Remove underline */
+}
+
+p.text-center a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
