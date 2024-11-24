@@ -5,18 +5,40 @@ content %}
   rel="stylesheet"
   href="{{ url_for('static', filename='css/login-register.css') }}"
 />
+
 <div class="body">
-  <!-- Header Title: Centered and larger font -->
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <!-- Login Title -->
           <h2 class="card-title text-center mb-4">Login</h2>
-          <!-- Login Form -->
           <form action="{{ url_for('login') }}" method="POST">
+            <!-- Role Selection -->
             <div class="form-group">
-              <label for="username">Username:</label>
+              <label for="role">Log in as:</label>
+              <div class="slider-container">
+                <input
+                  type="radio"
+                  id="user"
+                  name="role"
+                  value="User"
+                  checked
+                />
+                <label for="user" class="role-label">User</label>
+
+                <input
+                  type="radio"
+                  id="studio"
+                  name="role"
+                  value="Movie Studio"
+                />
+                <label for="studio" class="role-label">Movie Studio</label>
+              </div>
+            </div>
+
+            <!-- Username or Studio Name -->
+            <div class="form-group">
+              <label for="username">Username/Studio Name:</label>
               <input
                 type="text"
                 id="username"
@@ -26,6 +48,7 @@ content %}
               />
             </div>
 
+            <!-- Password -->
             <div class="form-group">
               <label for="password">Password:</label>
               <input
@@ -41,7 +64,6 @@ content %}
               Login
             </button>
           </form>
-          <!-- Register Link -->
           <p class="text-center mt-3">
             Don't have an account?
             <a href="{{ url_for('register_page') }}">Register here</a>

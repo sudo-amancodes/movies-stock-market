@@ -2,54 +2,140 @@
 content %}
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='css/login-register.css') }}"
+  href="{{ url_for('static', filename='css/profile.css') }}"
 />
-<div class="body">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h2 class="text-center mb-4">Profile</h2>
 
-      <div class="card text-center p-4 mb-4">
-        <div
-          class="profile-picture-container d-flex justify-content-center align-items-center mb-4"
-        >
-          <img
-            src="{{ url_for('static', filename='profile_pics/' ~ current_user.profile_picture) }}"
-            alt="Profile Picture"
-            class="rounded-circle shadow"
-            style="width: 150px; height: 150px; object-fit: cover"
-          />
-        </div>
-
-        <form
-          action="{{ url_for('update_profile_pic') }}"
-          method="POST"
-          enctype="multipart/form-data"
-          class="mt-4"
-        >
-          <div class="custom-file w-50 mx-auto">
-            <input
-              type="file"
-              class="custom-file-input"
-              id="profilePic"
-              name="profile_pic"
-              required
+<div class="container">
+  <div class="main-body">
+    <!-- Profile Details -->
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body text-center">
+            <img
+              src="{{ url_for('static', filename='profile_pics/' ~ current_user.profile_picture) }}"
+              alt="Profile Picture"
+              class="rounded-circle"
+              width="150"
             />
-            <label class="custom-file-label text-left" for="profilePic"
-              >Choose a file</label
+            {% if current_user.get_roles() == 'User' %}
+            <h4 class="mt-3">
+              {{ current_user.first_name }} {{ current_user.last_name }}
+            </h4>
+            {% else %}
+            <h4 class="mt-3">{{ current_user.studio_name }}</h4>
+            {% endif %}
+            <p class="text-secondary">{{ current_user.get_roles() }}</p>
+
+            <form
+              action="{{ url_for('update_profile_pic') }}"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              <div class="form-group">
+                <label
+                  for="profilePic"
+                  class="btn btn-outline-secondary btn-sm mt-2"
+                  >Choose File</label
+                >
+                <input
+                  type="file"
+                  name="profile_pic"
+                  id="profilePic"
+                  class="form-control-file d-none"
+                />
+                <button type="submit" class="btn btn-primary btn-sm">
+                  Update Picture
+                </button>
+              </div>
+            </form>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm mt-3"
+              >Sign Out</a
             >
           </div>
-          <button type="submit" class="btn btn-primary mt-3">
-            Change Profile Picture
-          </button>
-        </form>
+        </div>
       </div>
 
-      <div class="text-center mt-4">
-        <a href="{{ url_for('logout') }}" class="btn btn-warning">Logout</a>
+      <!-- User-Specific Details -->
+      {% if current_user.get_roles() == 'User' %}
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div class="card-body">
+            <form action="{{ url_for('update_profile') }}" method="POST">
+              <div class="row">
+                <div class="col-sm-3"><h6 class="mb-0">First Name</h6></div>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    name="first_name"
+                    value="{{ current_user.first_name }}"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3"><h6 class="mb-0">Last Name</h6></div>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    name="last_name"
+                    value="{{ current_user.last_name }}"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3"><h6 class="mb-0">Username</h6></div>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    name="username"
+                    value="{{ current_user.username }}"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-12">
+                  <button type="submit" class="btn btn-info">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h6>Followers</h6>
+            {% for follower in current_user.followers %}
+            <div>{{ follower.username }}</div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
+      {% else %}
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h6 class="d-flex align-items-center mb-3">
+              Movie Studio Information
+            </h6>
+            <p>
+              <strong>Number of Followers:</strong> {{
+              current_user.followers|length }}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
-</body>
-  {% endblock %}
 </div>
+{% endblock %}

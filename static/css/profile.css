@@ -1,0 +1,50 @@
+body {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.main-body {
+  padding: 15px;
+}
+
+.card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+img.rounded-circle {
+  border: 2px solid #007bff;
+}
+
+h6 {
+  color: #007bff;
+}
+
+.btn-info {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Hide the default file input */
+input[type="file"] {
+  display: none;
+}

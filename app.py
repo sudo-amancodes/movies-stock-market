@@ -7,7 +7,7 @@ from flask import request, jsonify, redirect, url_for, session, render_template,
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
 
-from src.models import Role, User, db
+from src.models import User, db, Role
 from dotenv import load_dotenv
 
 # Comment this if you are using environment variables in your code instead of in a .env file (not recommended)
@@ -54,7 +54,7 @@ app = create_app()
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
+login_manager.login_message = ''
 
 # User loader for Flask-Login
 @login_manager.user_loader
@@ -90,37 +90,57 @@ def register_page():
 
 @app.post('/register')
 def register():
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    username = request.form.get('username')
+    role = request.form.get('role')
     password = request.form.get('password')
-    role = request.form.get('role')  # New field for role selection
-
-    existing_user = User.query.filter_by(username=username).first()
-    if existing_user:
-        flash('Username already exists.', 'danger')
-        return redirect(url_for('login_page'))
-
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256:600000')
-    
-    # Create the new user
-    new_user = User(first_name=first_name, last_name=last_name, username=username, password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
 
-    # Assign role
+    if role == 'User':
+        # Collect user-specific fields
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        username = request.form.get('username')
+
+        # Ensure the username is unique
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists.', 'danger')
+            return redirect(url_for('login_page'))
+ 
+
+        # Create a new user
+        new_user = User(first_name=first_name, last_name=last_name, username=username, password=hashed_password)
+
+    elif role == 'Movie Studio':
+        # Collect studio-specific fields
+        studio_name = request.form.get('studio_name')
+
+        # Ensure the studio name is unique
+        if User.query.filter_by(studio_name=studio_name).first():
+            flash('Studio name already exists.', 'danger')
+            return redirect(url_for('login_page'))
+ 
+
+        # Create a new studio
+        new_user = User(studio_name=studio_name, password=hashed_password)
+
+    else:
+        flash('Invalid role selected.', 'danger')
+        return redirect(url_for('register_page'))
+ 
+
+    # Assign role to the new user
     selected_role = Role.query.filter_by(name=role).first()
     if not selected_role:
-        # If the role doesn't exist, create it
         selected_role = Role(name=role)
         db.session.add(selected_role)
         db.session.commit()
 
     new_user.roles.append(selected_role)
+    db.session.add(new_user)
     db.session.commit()
 
     flash(f'Registration successful as a {role}. Please log in.', 'success')
     return redirect(url_for('login'))
+
 
 
 @app.get('/login')
@@ -129,19 +149,28 @@ def login_page():
 
 @app.post('/login')
 def login():
+    role = request.form.get('role')  # Get the selected role
     username = request.form.get('username')
     password = request.form.get('password')
 
-    user = User.query.filter_by(username=username).first()
+    # Determine whether to authenticate as a user or a studio
+    if role == 'User':
+        user = User.query.filter_by(username=username).first()  # Normal user
+    elif role == 'Movie Studio':
+        user = User.query.filter_by(studio_name=username).first()  # Movie studio
+    else:
+        flash('Invalid role selected.', 'danger')
+        return redirect(url_for('login_page'))
 
+    # Check password and log in the user
     if user and check_password_hash(user.password, password):
         login_user(user)
         flash('Login successful!', 'success')
         return redirect(url_for('index'))
     else:
-        flash('Invalid username or password.', 'danger')
+        flash('Invalid username/studio name or password.', 'danger')
+        return redirect(url_for('login_page'))
 
-    return render_template('login.html')
 
 @app.get('/logout')
 @login_required
@@ -181,6 +210,29 @@ def update_profile_pic():
     else:
         flash('Invalid file type', 'danger')
         return redirect(url_for('profile'))
+    
+@app.post('/update_profile')
+@login_required
+def update_profile():
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    username = request.form.get('username')
+
+    # Ensure username is unique
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user and existing_user.id != current_user.id:
+        flash('Username already exists. Please choose another.', 'danger')
+        return redirect(url_for('profile'))
+
+    # Update user details
+    current_user.first_name = first_name
+    current_user.last_name = last_name
+    current_user.username = username
+    db.session.commit()
+
+    flash('Profile updated successfully.', 'success')
+    return redirect(url_for('profile'))
+
 
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
