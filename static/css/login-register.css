@@ -1,6 +1,6 @@
 /* Universal styles */
 body {
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url("../login-bg2.webp"); /* Use provided URL */
   background-size: cover; /* Cover the entire viewport */
   background-repeat: no-repeat; /* Prevent repeating */
@@ -12,16 +12,6 @@ body {
 }
 
 /* Overlay for adjustable opacity */
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Adjustable opacity */
-  z-index: -1; /* Keep the overlay in the background */
-}
 
 /* Center the card on the page */
 .row {
