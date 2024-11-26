@@ -5,7 +5,10 @@
   padding: 10px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Thin border for a sleek finish */
 }
-
+body {
+  background-color: #121212; /* Darker background for the entire page */
+  color: #f1f1f1; /* Lighter character theme for better readability */
+}
 .navbar-brand {
   display: flex;
   align-items: center;

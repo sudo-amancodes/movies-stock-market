@@ -1,0 +1,24 @@
+/* Studio Profile Card */
+.studio-info {
+  display: flex;
+  align-items: center;
+}
+
+.studio-info img {
+  border: 2px solid #00bcd4;
+  margin-right: 10px;
+}
+
+.studio-info span {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.studio-profile img {
+  border: 3px solid #00bcd4;
+  margin-bottom: 20px;
+}
+
+.studio-profile h2 {
+  color: #333;
+}

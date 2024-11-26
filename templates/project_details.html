@@ -1,0 +1,114 @@
+{% extends "_layout.html" %} {% block title %}{{ project.name }}{% endblock %}
+{% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/project_details.css') }}"
+/>
+
+<div class="container-fluid mt-4 h-100">
+  <div class="row h-100">
+    <!-- Left Column: Project Information -->
+    <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+      <div class="project-info text-center">
+        <h1 class="project-title">{{ project.name }}</h1>
+        <img
+          src="{{ url_for('static', filename='project_banners/' ~ project.banner) }}"
+          alt="{{ project.name }}"
+          class="project-banner"
+        />
+        <p class="mt-3 project-description">{{ project.description }}</p>
+        <!-- Follow/Unfollow Project -->
+        <div class="follow-project mt-4">
+          {% if current_user.is_authenticated %} {% if project in
+          current_user.followed_projects %}
+          <form
+            action="{{ url_for('unfollow_project', project_id=project.id) }}"
+            method="POST"
+            class="d-inline"
+          >
+            <button type="submit" class="btn btn-secondary">
+              Unfollow Project
+            </button>
+          </form>
+          {% else %}
+          <form
+            action="{{ url_for('follow_project', project_id=project.id) }}"
+            method="POST"
+            class="d-inline"
+          >
+            <button type="submit" class="btn btn-primary">
+              Follow Project
+            </button>
+          </form>
+          {% endif %} {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Chat Interface -->
+    <div class="col-12 col-md-6 d-flex flex-column h-100">
+      <div class="card chat-card flex-grow-1">
+        <div class="card-header">
+          <h5>Project Chat</h5>
+        </div>
+        <div class="card-body chat-body" id="chat-messages">
+          <ul id="messages" class="list-unstyled mb-0">
+            {% for message in project.messages %}
+            <li class="mb-3 d-flex">
+              <a
+                href="{{ url_for('user_profile', user_id=message.author.id) }}"
+                class="mr-3"
+              >
+                <img
+                  src="{{ url_for('static', filename='profile_pics/' ~ (message.author.profile_picture or 'default_profile.png')) }}"
+                  alt="{{ message.author.username or message.author.studio_name }}"
+                  class="profile-pic rounded-circle"
+                />
+              </a>
+              <div>
+                <strong
+                  >{{ message.author.username or message.author.studio_name
+                  }}</strong
+                >
+                <span>: {{ message.content }}</span>
+                <br />
+                <small class="text-muted"
+                  >{{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small
+                >
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="card-footer">
+          <form id="chat-form" class="d-flex">
+            <input
+              type="text"
+              id="message"
+              class="form-control flex-grow-1 mr-2"
+              placeholder="Type your message here..."
+              autocomplete="off"
+              required
+            />
+            <button type="submit" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include SocketIO client script with corrected integrity -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"
+  crossorigin="anonymous"
+></script>
+
+<!-- Pass project_id to JavaScript -->
+<script>
+  const project_id = {{ project.id }};
+</script>
+
+<!-- Include custom JavaScript for project details -->
+<script src="{{ url_for('static', filename='javascript/project_details.js') }}"></script>
+{% endblock %}

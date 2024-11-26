@@ -1,0 +1,58 @@
+{% extends "_layout.html" %} {% block title %}News{% endblock %} {% block
+content %}
+<div class="container">
+  <h2>Movie News</h2>
+
+  <!-- Search Form -->
+  <form method="GET" action="{{ url_for('news') }}" class="mb-4">
+    <div class="input-group">
+      <input
+        type="text"
+        name="search"
+        class="form-control"
+        placeholder="Search news..."
+        value="{{ request.args.get('search', '') }}"
+      />
+      <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+  </form>
+
+  <!-- News Carousel -->
+  <div id="newsCarousel" class="carousel-container">
+    <button class="carousel-arrow left" onclick="scrollCarousel(-1)">❮</button>
+    <div class="carousel-content">
+      {% for article in news %}
+      <div class="project-card">
+        <img
+          src="{{ article.urlToImage or url_for('static', filename='default_news.png') }}"
+          alt="{{ article.title }}"
+          class="project-banner"
+        />
+        <div class="project-info">
+          <h5>{{ article.title }}</h5>
+          <p>{{ article.description[:100] }}...</p>
+          <a
+            href="{{ article.url }}"
+            target="_blank"
+            class="btn btn-secondary btn-sm"
+            >Read More</a
+          >
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-arrow right" onclick="scrollCarousel(1)">❯</button>
+  </div>
+</div>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/news.css') }}"
+/>
+<script>
+  function scrollCarousel(direction) {
+    const container = document.querySelector(".carousel-content");
+    const scrollAmount = container.offsetWidth / 2;
+    container.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+  }
+</script>
+{% endblock %}

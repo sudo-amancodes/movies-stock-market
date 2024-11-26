@@ -1,6 +1,6 @@
 /* Universal styles */
 body {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
     url("../login-bg2.webp"); /* Use provided URL */
   background-size: cover; /* Cover the entire viewport */
   background-repeat: no-repeat; /* Prevent repeating */
