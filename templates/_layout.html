@@ -25,7 +25,7 @@
           width="40"
           height="40"
         />
-        Movie Stock Market
+        Movie Night
       </a>
 
       <button
@@ -42,6 +42,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           {% if current_user.is_authenticated %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index') }}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('news') }}">News</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
           </li>
@@ -58,7 +65,7 @@
         </ul>
       </div>
     </nav>
-    <div class="container mt-4">
+    <div class="">
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %}
       <div class="container">
@@ -82,12 +89,13 @@
       {% endif %} {% endwith %}
     </div>
 
-    <div class="container mt-4">{% block content %}{% endblock %}</div>
+    <div class="container mt-3">{% block content %}{% endblock %}</div>
 
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/navbar.css') }}"
     />
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

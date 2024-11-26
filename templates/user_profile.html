@@ -1,0 +1,124 @@
+<!-- templates/user_profile.html -->
+
+{% extends "_layout.html" %} {% block title %}{{ user.username or
+user.studio_name }}{% endblock %} {% block content %}
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- Left Column: User Information -->
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <img
+            src="{{ url_for('static', filename='profile_pics/' ~ (user.profile_picture or 'default_profile.png')) }}"
+            alt="{{ user.username or user.studio_name }}"
+            class="img-fluid rounded-circle mb-3 avatar"
+          />
+          <h2>{{ user.username or user.studio_name }}</h2>
+          <p class="text-secondary">{{ user.get_roles() }}</p>
+
+          <!-- Follow/Unfollow Button -->
+          <div class="follow-user mt-3">
+            {% if current_user.is_authenticated and user != current_user %} {%
+            if current_user.is_following(user) %}
+            <form
+              action="{{ url_for('unfollow_user', user_id=user.id) }}"
+              method="POST"
+              class="d-inline"
+            >
+              <button type="submit" class="btn btn-secondary">Unfollow</button>
+            </form>
+            {% else %}
+            <form
+              action="{{ url_for('follow_user', user_id=user.id) }}"
+              method="POST"
+              class="d-inline"
+            >
+              <button type="submit" class="btn btn-primary">Follow</button>
+            </form>
+            {% endif %} {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: User Details -->
+    <div class="col-md-8">
+      <!-- Followers and Following Counts -->
+      <div class="row mb-4">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Followers</h5>
+              <p class="card-text">{{ user.followers_users|length }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Following</h5>
+              <p class="card-text">{{ user.following_users|length }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Followed Projects -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Followed Projects</h5>
+          {% if user.followed_projects %}
+          <div class="row">
+            {% for project in user.followed_projects %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card project-card">
+                <img
+                  src="{{ url_for('static', filename='project_banners/' ~ project.banner) }}"
+                  class="card-img-top project-banner"
+                  alt="{{ project.name }}"
+                />
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ project.name }}</h5>
+                  <p class="card-text">
+                    {{ project.description[:100] }}{% if
+                    project.description|length > 100 %}...{% endif %}
+                  </p>
+                  <div class="mt-auto">
+                    <p class="mb-1">
+                      <strong>Followers:</strong> {{ project.followers|length }}
+                    </p>
+                    <div class="d-flex justify-content-center">
+                      <a
+                        href="{{ url_for('project_details', project_id=project.id) }}"
+                        class="btn btn-primary btn-sm mr-2"
+                        >View Project</a
+                      >
+                      <form
+                        action="{{ url_for('unfollow_project', project_id=project.id) }}"
+                        method="POST"
+                        class="d-inline"
+                      ></form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p>This user is not following any projects yet.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Additional User-Specific Content (Optional) -->
+      <!-- You can add more sections here if needed -->
+    </div>
+  </div>
+</div>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/user_profile.css') }}"
+/>
+{% endblock %}
