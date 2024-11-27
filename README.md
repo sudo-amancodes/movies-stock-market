@@ -73,6 +73,7 @@ DB_HOST = <YourDBHost>
 DB_PORT = <YourDBPort>
 DB_NAME = <YourDBName>
 SECRET_KEY = 123456
+NEWS_API_KEY = <NewsAPI>
 ```
 
 9. Run the final Flask web application
